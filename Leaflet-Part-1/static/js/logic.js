@@ -6,20 +6,20 @@ d3.json(url).then(function (data) {
   });
   
   function createFeatures(earthquakeData) {
-
+    // function to handle popups to each marker
     function onEachFeature(feature, layer) {
       layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>Time: ${new Date(feature.properties.time)}</p>
-      <p>Magnitude: ${feature.properties.mag}</p><p>Depth: ${feature.geometry.coordinates[2]}</p>
-      <p>lat: ${feature.geometry.coordinates[0]},log: ${feature.geometry.coordinates[1]}</p>`);
+      <p>Magnitude: ${feature.properties.mag}, Depth: ${feature.geometry.coordinates[2]}</p>
+      <p>Longitude: ${feature.geometry.coordinates[0]}, Latitude: ${feature.geometry.coordinates[1]}</p>`);
     }
-  
+    // function to handle circle markers on map
     function pointToLayer(feature, latlng) {
         let magni = parseFloat(feature.properties.mag);
         let colorDepth = chooseColor(feature.geometry.coordinates[2]);
         let geojsonMarkerOptions = geojsonMarker(magni,colorDepth);
         return L.circleMarker(latlng, geojsonMarkerOptions);
     }
-
+    // function to select color by depth of earthquakes
     function chooseColor(rating) {
         if ( rating < 10) {
           return '#DAF7A6';
@@ -36,9 +36,8 @@ d3.json(url).then(function (data) {
         }
     }
     
-    
+    // configuring properties of markers
     function geojsonMarker(magni,colorDepth) {
-
         geojsonMarkerOptions = {
         radius: magni * 3,
         fillColor: colorDepth,
@@ -50,7 +49,7 @@ d3.json(url).then(function (data) {
         return geojsonMarkerOptions
     };
 
-    // add legend to map
+    // configuring legend on map
     var legend = L.control({ position: 'bottomright' });
     // Define the HTML elements for the legend
     legend.onAdd = function (map) {
@@ -84,7 +83,6 @@ d3.json(url).then(function (data) {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     })
   
-
     // Create a baseMaps object.
     let baseMaps = {
       "Street Map": street,
